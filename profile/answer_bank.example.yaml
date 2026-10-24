@@ -1,0 +1,41 @@
+# ANSWER BANK: answers for application form questions.
+# Copy to profile/answer_bank.yaml and replace with your own answers.
+# The submit skill only uses answers written here. Leave a value as TODO if you have not decided;
+# Claude stops and asks instead of guessing. Add new answers whenever a form asks something new.
+# Fields marked "forms only" are never printed on the CV.
+
+work_authorization: I hold an EU Blue Card for Germany and do not require visa sponsorship.
+requires_sponsorship: "No"
+authorized_to_work_in_germany: "Yes"
+work_permit_status: "Not EU/EEA citizen, valid EU Blue Card"
+work_permit_expiry: ""            # leave blank if you prefer not to share
+current_location: Berlin, Germany
+willing_to_relocate_within_germany: "Yes, anywhere in Germany"
+travel_willingness: "Up to 25%"
+
+salary_expectation_eur_per_year: "55,000 - 65,000 EUR gross per year"
+salary_expectation_single_number: "60000"
+salary_expectation_monthly_gross_eur: "4600-5400"
+notice_period: "3 months"
+earliest_start_date: "3 months after signing (notice period)"
+
+german_level: B1
+english_level: C1
+years_of_experience: "4"
+university_latest: Example University
+
+# Equal-opportunity questions: answer, or use "Prefer not to say".
+gender: TODO
+disability_status: TODO
+citizenship: TODO
+country_of_birth: TODO
+nationality: TODO
+
+# Forms only, never on the CV.
+street_address: TODO
+postcode: TODO
+city: Berlin
+date_of_birth: TODO
+
+how_did_you_hear: Company careers page / job board
+ai_interview_notetaker_consent: "No"   # privacy-preserving default

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JobPilot Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+/* Layout: pipeline strip on top, review queue (left) + application detail with live PDF preview (right). */
+:root {
+  --bg: #f4f5f8; --surface: #ffffff; --line: #dde0e8; --fg: #1b1e27; --muted: #5d6475;
+  --accent: #2f4b9a; --accent-soft: #e6ebf7;
+  --good: #1f7a4d; --good-soft: #e3f3ea; --warn: #9a6200; --warn-soft: #fbf0dc; --bad: #b3261e; --bad-soft: #f9e4e2;
+  --display: "Fraunces", Georgia, serif;
+  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12141a; --surface: #1b1e27; --line: #2e3340; --fg: #e8eaf0; --muted: #9aa1b2;
+  --accent: #8ea6ec; --accent-soft: #252d45;
+  --good: #6fcf9d; --good-soft: #1a3328; --warn: #e8b45a; --warn-soft: #3a2e17; --bad: #f08a80; --bad-soft: #3d1f1d;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #12141a; --surface: #1b1e27; --line: #2e3340; --fg: #e8eaf0; --muted: #9aa1b2;
+  --accent: #8ea6ec; --accent-soft: #252d45;
+  --good: #6fcf9d; --good-soft: #1a3328; --warn: #e8b45a; --warn-soft: #3a2e17; --bad: #f08a80; --bad-soft: #3d1f1d;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--sans); }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+
+.app { height: 100%; display: grid; grid-template-rows: auto auto 1fr;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding-block: 18px 12px; }
+h1 { font: 600 22px/1.1 var(--display); margin: 0; letter-spacing: .2px; }
+.cap { font: 500 12px var(--mono); color: var(--muted); }
+.cap b { color: var(--fg); }
+
+.pipeline { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 12px; }
+.stage { flex: 0 0 auto; display: flex; flex-direction: column; gap: 2px; padding: 8px 14px; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--surface); color: var(--fg); text-align: left; }
+.stage .n { font: 500 18px var(--mono); font-variant-numeric: tabular-nums; }
+.stage .l { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.stage[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.arrow { align-self: center; color: var(--muted); }
+
+.main { min-height: 0; display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 16px; padding-bottom: 16px; }
+.queue { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.item { display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid transparent;
+  border-radius: 6px; background: transparent; color: var(--fg); text-align: left; }
+.item:hover { background: var(--surface); }
+.item[aria-current="true"] { background: var(--surface); border-color: var(--line); }
+.item .t { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .c { color: var(--muted); font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item > div { min-width: 0; }
+.score { font: 500 15px var(--mono); font-variant-numeric: tabular-nums; text-align: center; padding: 4px 0; border-radius: 4px; }
+.s-hi { background: var(--good-soft); color: var(--good); }
+.s-mid { background: var(--warn-soft); color: var(--warn); }
+.s-lo { background: var(--bad-soft); color: var(--bad); }
+
+.detail { min-height: 0; min-width: 0; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.d-head { position: sticky; top: 0; z-index: 2; background: var(--surface); border-bottom: 1px solid var(--line); padding: 16px 20px;
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.d-head h2 { font: 600 19px/1.25 var(--display); margin: 0 0 4px; text-wrap: balance; }
+.d-head .meta { color: var(--muted); font-size: 13px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 7px 14px; border-radius: 6px; font-weight: 500; }
+.btn:hover { border-color: var(--muted); }
+.btn.approve { background: var(--good); border-color: var(--good); color: var(--surface); }
+.btn.reject:hover { border-color: var(--bad); color: var(--bad); }
+kbd { font: 11px var(--mono); color: inherit; opacity: .7; margin-left: 6px; }
+
+.d-body { padding: 18px 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+.summary { font-size: 15px; max-width: 65ch; margin: 0; }
+.label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { padding: 2px 9px; border-radius: 999px; font-size: 12.5px; }
+.chip.m { background: var(--good-soft); color: var(--good); }
+.chip.g { background: var(--warn-soft); color: var(--warn); }
+.chip.f { background: var(--bad-soft); color: var(--bad); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.links { display: flex; flex-wrap: wrap; gap: 14px; font-weight: 500; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+.tab { border: 0; background: none; padding: 8px 12px; color: var(--muted); border-bottom: 2px solid transparent; }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.pdf { width: 100%; height: 78vh; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+.textblock { position: relative; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; max-width: 75ch; white-space: pre-wrap; }
+.copy { position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 3px 8px; }
+.empty { padding: 48px 24px; color: var(--muted); max-width: 52ch; }
+.empty h2 { font: 600 18px var(--display); color: var(--fg); margin: 0 0 6px; }
+.empty code { font-family: var(--mono); background: var(--bg); padding: 1px 5px; border-radius: 3px; }
+.toast { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%);
+  background: var(--fg); color: var(--bg); padding: 8px 16px; border-radius: 6px; font-weight: 500; }
+
+@media (max-width: 760px) {
+  .app { height: auto; }
+  .main { grid-template-columns: 1fr; }
+  .queue { max-height: 40vh; }
+  .pdf { height: 70vh; }
+}
+@media (prefers-reduced-motion: no-preference) { .item, .btn, .stage { transition: background .12s, border-color .12s; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>JobPilot Review</h1>
+    <span class="cap" id="cap">Applied today: <b>0</b> of 15</span>
+  </header>
+  <nav class="pipeline" id="pipeline" aria-label="Pipeline stages"></nav>
+  <div class="main">
+    <div class="queue" id="queue" role="list"></div>
+    <section class="detail" id="detail" aria-live="polite"></section>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const STAGES = [
+  ["ready_to_tailor", "To tailor"], ["ready_for_review", "Review"], ["approved", "Approved"], ["needs_user", "Needs you"],
+  ["applied", "Applied"], ["interview", "Interview"], ["offer", "Offer"], ["rejected", "Rejected by you"],
+  ["rejected_auto", "Low score"],
+];
+let state = { status: "ready_for_review", jobs: [], current: 0, tab: "cv" };
+try { state.status = localStorage.getItem("jp-status") || state.status; } catch (e) {}
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const scoreClass = (s) => (s >= 75 ? "s-hi" : s >= 65 ? "s-mid" : "s-lo");
+
+async function load() {
+  const [stats, jobs] = await Promise.all([
+    fetch("/api/stats").then((r) => r.json()),
+    fetch("/api/jobs?status=" + state.status).then((r) => r.json()),
+  ]);
+  state.jobs = jobs;
+  state.current = Math.min(state.current, Math.max(0, jobs.length - 1));
+  $("cap").innerHTML = `Applied today: <b>${stats.applied_today}</b> of 15`;
+  $("pipeline").innerHTML = STAGES.map(([k, l], i) =>
+    `${i && i < 6 ? '<span class="arrow" aria-hidden="true">›</span>' : ""}<button class="stage" data-s="${k}" aria-pressed="${k === state.status}">
+      <span class="n">${stats.counts[k] || 0}</span><span class="l">${l}</span></button>`).join("");
+  renderQueue();
+  renderDetail();
+}
+
+function renderQueue() {
+  $("queue").innerHTML = state.jobs.map((j, i) => `
+    <button class="item" role="listitem" data-i="${i}" aria-current="${i === state.current}">
+      <span class="score ${scoreClass(j.score)}">${j.score ?? "–"}</span>
+      <div><div class="t">${esc(j.title)}</div><div class="c">${esc(j.company)} · ${esc((j.location || "").split(/[;,]/)[0])}</div></div>
+    </button>`).join("");
+}
+
+function renderDetail() {
+  const j = state.jobs[state.current];
+  if (!j) {
+    const msg = state.status === "ready_for_review"
+      ? `<h2>Nothing waiting for review</h2>Tailored applications appear here. Run <code>/discover</code> to find jobs, then <code>/tailor</code> to prepare them.`
+      : `<h2>No jobs in this stage</h2>Pick another stage above.`;
+    $("detail").innerHTML = `<div class="empty">${msg}</div>`;
+    return;
+  }
+  const r = j.reasons || {};
+  const chips = (arr, cls) => (arr || []).map((x) => `<span class="chip ${cls}">${esc(x)}</span>`).join("") || `<span class="cap">None</span>`;
+  const canReview = ["ready_for_review", "approved", "rejected"].includes(j.status);
+  const answers = Object.entries(j.answers || {}).map(([k, v]) =>
+    `<div><p class="label">${esc(k.replace(/_/g, " "))}</p><div class="textblock">${esc(v)}</div></div>`).join("");
+  $("detail").innerHTML = `
+    <div class="d-head">
+      <div><h2>${esc(j.title)}</h2>
+        <div class="meta">${esc(j.company)} · ${esc(j.location)} · <span class="score ${scoreClass(j.score)}" style="padding:1px 6px">${j.score}</span> ${esc(j.track || "")}</div></div>
+      ${canReview ? `<div class="actions">
+        ${j.status !== "approved" ? `<button class="btn approve" data-act="approved">Approve<kbd>A</kbd></button>` : ""}
+        ${j.status !== "rejected" ? `<button class="btn reject" data-act="rejected">Reject<kbd>R</kbd></button>` : ""}
+        ${j.status !== "ready_for_review" ? `<button class="btn" data-act="ready_for_review">Back to review</button>` : ""}
+      </div>` : ""}
+    </div>
+    <div class="d-body">
+      <p class="summary">${esc(r.summary || "")}</p>
+      <div class="cols">
+        <div><p class="label">Matches</p><div class="chips">${chips(r.matches, "m")}</div></div>
+        <div><p class="label">Gaps</p><div class="chips">${chips(r.gaps, "g")}</div></div>
+        ${(r.flags || []).length ? `<div><p class="label">Check before applying</p><div class="chips">${chips(r.flags, "f")}</div></div>` : ""}
+      </div>
+      <div class="links">
+        <a href="${esc(j.url)}" target="_blank" rel="noopener">Job posting ↗</a>
+        ${j.cv ? `<a href="${j.cv}" target="_blank">CV PDF ↗</a>` : ""}
+        ${j.cover ? `<a href="${j.cover}" target="_blank">Cover letter PDF ↗</a>` : ""}
+      </div>
+      ${j.cv ? `
+      <div>
+        <div class="tabs" role="tablist">
+          ${[["cv", "CV"], ["cover", "Cover letter"], ["answers", "Form answers"], ["outreach", "Recruiter note"]].map(([k, l]) =>
+            `<button class="tab" role="tab" data-tab="${k}" aria-selected="${state.tab === k}">${l}</button>`).join("")}
+        </div>
+        <div style="padding-top:12px">
+          ${state.tab === "cv" ? `<iframe class="pdf" src="${j.cv}#view=FitH" title="CV preview"></iframe>` : ""}
+          ${state.tab === "cover" ? `<iframe class="pdf" src="${j.cover}#view=FitH" title="Cover letter preview"></iframe>` : ""}
+          ${state.tab === "answers" ? `<div class="d-body" style="padding:0">${answers || '<span class="cap">No answers prepared.</span>'}</div>` : ""}
+          ${state.tab === "outreach" ? `<div class="textblock" id="outreach">${esc(j.outreach || "No note prepared.")}<button class="btn copy" data-copy="outreach">Copy</button></div>` : ""}
+        </div>
+      </div>` : `<p class="cap">No documents yet. Run /tailor for this job.</p>`}
+    </div>`;
+}
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.h); toast.h = setTimeout(() => (t.hidden = true), 1800);
+}
+
+async function setStatus(status) {
+  const j = state.jobs[state.current];
+  if (!j) return;
+  const res = await fetch(`/api/jobs/${encodeURIComponent(j.id)}/status`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+  if (!res.ok) { toast("Couldn't save. Is the dashboard server still running?"); return; }
+  toast({ approved: "Approved. Claude will submit it.", rejected: "Rejected", ready_for_review: "Moved back to review" }[status] || "Saved");
+  await load();
+}
+
+document.addEventListener("click", (e) => {
+  const s = e.target.closest("[data-s]"), it = e.target.closest("[data-i]"), act = e.target.closest("[data-act]");
+  const tab = e.target.closest("[data-tab]"), cp = e.target.closest("[data-copy]");
+  if (s) { state.status = s.dataset.s; state.current = 0; try { localStorage.setItem("jp-status", state.status); } catch (e) {} load(); }
+  else if (it) { state.current = +it.dataset.i; renderQueue(); renderDetail(); }
+  else if (act) setStatus(act.dataset.act);
+  else if (tab) { state.tab = tab.dataset.tab; renderDetail(); }
+  else if (cp) {
+    const text = state.jobs[state.current]?.outreach || "";
+    navigator.clipboard.writeText(text).then(() => toast("Copied"), () => {
+      const r = document.createRange(); r.selectNodeContents($("outreach")); getSelection().removeAllRanges(); getSelection().addRange(r);
+      toast("Press ⌘C to copy");
+    });
+  }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.target.closest("input, textarea")) return;
+  const k = e.key.toLowerCase();
+  if (k === "j" || e.key === "ArrowDown") { state.current = Math.min(state.current + 1, state.jobs.length - 1); renderQueue(); renderDetail(); }
+  else if (k === "k" || e.key === "ArrowUp") { state.current = Math.max(state.current - 1, 0); renderQueue(); renderDetail(); }
+  else if (k === "a" && state.status === "ready_for_review") setStatus("approved");
+  else if (k === "r" && state.status === "ready_for_review") setStatus("rejected");
+});
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+\documentclass[a4paper,11pt]{article}
+((* include "preamble.tex" *))
+
+\begin{document}
+\cvheader
+
+\section{Profile}
+\small ((( summary | tex )))
+
+\section{Experience}
+  \resumeSubHeadingListStart
+((* for e in experience *))
+    \resumeSubheading
+      {((( e.company | tex )))}{((( e.dates | tex )))}
+      {((( e.title | tex )))}{((( e.location | tex )))}
+      \resumeItemListStart
+((* if e.topic *))
+        \resumeItem{\textit{Thesis: ((( e.topic | tex )))}}
+((* endif *))
+((* for b in e.bullets *))
+        \resumeItem{((( b | tex )))}
+((* endfor *))
+      \resumeItemListEnd
+((* endfor *))
+  \resumeSubHeadingListEnd
+
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+((* for g in skills *))
+     \textbf{((( g.group | tex )))}{: ((( g["items"] | join(", ") | tex )))}((* if not loop.last *)) \\((* endif *))
+
+((* endfor *))
+    }}
+ \end{itemize}
+
+\section{Education}
+  \resumeSubHeadingListStart
+((* for ed in education *))
+    \resumeSubheading
+      {((( ed.school | tex )))}{((( ed.start ))) -- ((( ed.end )))}
+      {((( ed.degree | tex )))}{((( ed.location | tex )))}
+((* endfor *))
+  \resumeSubHeadingListEnd
+
+((* if projects *))
+\section{Projects}
+    \resumeSubHeadingListStart
+((* for pr in projects *))
+      \resumeProjectHeading
+          {\textbf{((( pr.name | tex )))}((* if pr.stack *)) $|$ \emph{((( pr.stack | join(", ") | tex )))}((* endif *))}{}
+          \resumeItemListStart
+            \resumeItem{((( pr.text | tex )))}
+          \resumeItemListEnd
+((* endfor *))
+    \resumeSubHeadingListEnd
+((* endif *))
+
+((* if achievements *))
+\section{Achievements}
+  \resumeItemListStart
+((* for a in achievements *))
+    \resumeItem{((( a.text | tex )))}
+((* endfor *))
+  \resumeItemListEnd
+((* endif *))
+
+\section{Languages}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{((* for l in p.languages *))\textbf{((( l.language | tex )))}: ((( l.level | tex )))((* if not loop.last *)) \quad ((* endif *))((* endfor *))}}
+ \end{itemize}
+
+\end{document}

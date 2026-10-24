@@ -1,0 +1,48 @@
+# Example output of the tailor skill for a fictional job (job id example:demo-1).
+job_id: example:demo-1
+track: devops
+headline: DevOps Engineer | Kubernetes · Helm · Terraform · GitHub Actions
+summary: >-
+  DevOps Engineer running Kubernetes and Helm platforms and CI/CD pipelines. At Northwind I built
+  GitHub Actions pipelines with SonarQube checks, cutting failed deployments by 25%. At Contoso I moved
+  EC2 services to Amazon EKS with Terraform.
+skills:
+  - group: "Containers & Orchestration"
+    items: [Kubernetes, Helm, Docker, Argo CD]
+  - group: "CI/CD"
+    items: [GitHub Actions, Jenkins]
+  - group: "IaC & Cloud"
+    items: [Terraform, Ansible, AWS]
+  - group: "Languages"
+    items: [Python, Bash]
+experience:
+  - id: northwind
+    bullets:
+      - id: nw-gha
+      - id: nw-k8s
+      - id: nw-grafana
+  - id: contoso
+    bullets:
+      - id: co-eks
+      - id: co-cost
+  - id: thesis
+    bullets:
+      - id: th-pipeline
+  - id: fabrikam
+    bullets:
+      - id: fa-selenium
+projects: [proj-gitops]
+achievements: []
+cover_letter:
+  greeting: Dear Acme Robotics Team,
+  paragraphs:
+    - I'm applying for the Platform Engineer role. Your stack of Kubernetes, Helm, Terraform and GitHub Actions is what I use every day.
+    - At Northwind I manage Helm releases for 8 internal services and built GitHub Actions pipelines with SonarQube checks, which cut failed deployments by 25%.
+    - At Contoso I moved EC2 services to Amazon EKS with Terraform.
+    - My German is at B1 level, so I am more confident working in English.
+    - I hold an EU Blue Card, so I don't need sponsorship. My notice period is three months. I'm happy to talk whenever suits you.
+  closing: Kind regards,
+answers:
+  why_this_role: The role is mostly Kubernetes and CI/CD work, which is what I do now. I like making deployments boring and safe.
+  why_company: Acme Robotics runs its own platform on AWS. I want to work on a team that owns its infrastructure.
+outreach: Hi, I applied for the Platform Engineer role. I run Kubernetes and Helm at Northwind and moved services to EKS with Terraform at Contoso. Happy to chat.
