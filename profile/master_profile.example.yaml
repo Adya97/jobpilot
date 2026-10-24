@@ -1,0 +1,147 @@
+# MASTER PROFILE: single source of truth.
+# Copy this file to profile/master_profile.yaml and replace everything with your own facts.
+# Tailoring may SELECT, REORDER and REWORD items from this file. It may NEVER add
+# employers, dates, tools, metrics or achievements that are not written here.
+# Entries marked TODO are incomplete and must not be used until filled in.
+# This example person and all employers are fictional.
+
+personal:
+  name: Alex Example
+  location: Berlin, Germany
+  phone: "+49 30 0000000"
+  email: alex.example@example.com
+  links:
+    linkedin: https://www.linkedin.com/in/alex-example
+    github: https://github.com/alex-example
+    portfolio: https://alex-example.dev/
+  header_badge: EU Blue Card        # optional short badge in the CV header (e.g. work permit). Remove if not needed.
+  work_authorization: EU Blue Card (Germany), no sponsorship required
+  languages:
+    - { language: English, level: C1 }
+    - { language: German, level: B1 }
+
+target:
+  roles: [Cloud Engineer, DevOps Engineer, Platform Engineer, Site Reliability Engineer, MLOps Engineer,
+          QA Automation Engineer]
+  seniority: [Junior, Mid]
+  work_mode: [onsite, hybrid, remote]
+  country: Germany
+  relocation: anywhere in Germany
+  posting_language: English and German postings (CV and cover letter in English)
+
+# One summary per track. Scoring picks a track per job, tailoring starts from that summary.
+summaries:
+  devops: >-
+    DevOps Engineer running Kubernetes and Helm platforms and CI/CD pipelines. Moved EC2 services to
+    Amazon EKS with Terraform and built GitHub Actions pipelines with SonarQube checks and Grafana alerting.
+  ai_ml: >-
+    Engineer combining DevOps and machine learning: built a CI/CD pipeline for ML models and deployed a
+    text classifier on SageMaker, on top of production Kubernetes and Terraform experience.
+  qa: >-
+    Automation engineer spanning test automation and DevOps: wrote 120 Selenium test scripts and added
+    quality gates (SonarQube) to CI/CD pipelines.
+
+# Every experience entry needs a unique id. Every bullet needs a unique id.
+# aliases: names a sentence may use for this employer (the guard checks that numbers in a sentence
+#          belong to the employer it names). Defaults to the company name without GmbH/Ltd.
+# part_of: set this on an entry that happened inside another one (e.g. a thesis at an employer).
+experience:
+  - id: northwind
+    title: DevOps Engineer
+    company: Northwind Cloud GmbH
+    aliases: [northwind]
+    location: Berlin, Germany
+    start: 2025-01
+    end: present
+    tags: [devops, kubernetes]
+    bullets:
+      - id: nw-k8s
+        tags: [devops, kubernetes]
+        text: Operate Kubernetes namespaces for test and staging environments and manage Helm releases for 8 internal services.
+      - id: nw-gha
+        tags: [cicd]
+        text: Built GitHub Actions pipelines with SonarQube checks, cutting failed deployments by 25%.
+      - id: nw-grafana
+        tags: [observability, sre]
+        text: Set up Grafana dashboards and alerts for the platform team.
+
+  - id: contoso
+    title: Working Student, Cloud
+    company: Contoso Analytics GmbH
+    aliases: [contoso]
+    location: Munich, Germany
+    start: 2023-04
+    end: 2024-12
+    tags: [aws, iac]
+    bullets:
+      - id: co-eks
+        tags: [aws, kubernetes, iac]
+        text: Moved EC2-based services to Amazon EKS with Terraform.
+      - id: co-cost
+        tags: [aws]
+        text: Cleaned up unused AWS resources, lowering the monthly bill by 15%.
+
+  - id: thesis
+    title: Master's Thesis (MLOps)
+    company: Contoso Analytics GmbH
+    aliases: [thesis]
+    part_of: contoso
+    location: Munich, Germany
+    start: 2024-04
+    end: 2024-09
+    topic: Automated Deployment of Text Classifiers
+    tags: [ml, mlops]
+    bullets:
+      - id: th-pipeline
+        tags: [mlops, cicd]
+        text: Built a CI/CD pipeline for ML models with GitHub Actions and Terraform.
+      - id: th-model
+        tags: [ml, aws]
+        text: Trained and deployed a text classifier on Amazon SageMaker.
+
+  - id: fabrikam
+    title: QA Engineer
+    company: Fabrikam Software Ltd
+    aliases: [fabrikam]
+    location: Remote
+    start: 2021-06
+    end: 2023-03
+    tags: [qa]
+    bullets:
+      - id: fa-selenium
+        tags: [qa, automation]
+        text: Wrote 120 automated test scripts with Selenium.
+      - id: fa-regression
+        tags: [qa]
+        text: Ran regression and UI tests before each release.
+
+education:
+  - degree: M.Sc. Computer Science
+    school: Example University
+    location: Berlin, Germany
+    start: 2022
+    end: 2024
+
+projects:
+  - id: proj-gitops
+    name: GitOps Demo Cluster
+    stack: [Argo CD, Kubernetes, Helm]
+    tags: [gitops, kubernetes]
+    text: Set up a demo cluster where Argo CD deploys Helm charts from a Git repository.
+
+achievements:
+  - id: ach-hackathon
+    tags: [ai]
+    text: Won a university hackathon (2023) with a chatbot built on AWS Lambda.
+
+skills:
+  cloud: [AWS (EKS, EC2, Lambda, S3, SageMaker), Azure]
+  containers_orchestration: [Kubernetes, Helm, Docker, Argo CD]
+  cicd: [GitHub Actions, Jenkins]
+  iac_config: [Terraform, Ansible]
+  observability: [Grafana, Prometheus]
+  security: [SonarQube]
+  testing: [Selenium, regression testing]
+  programming: [Python, Bash]
+  os: [Linux]
+  tools: [Git, Jira]

@@ -1,0 +1,90 @@
+# What discovery looks for. Edit freely — no code changes needed.
+
+# A job title must match at least one of these (case-insensitive substring).
+title_include:
+  - devops
+  - dev ops
+  - cloud
+  - platform engineer
+  - site reliability
+  - sre
+  - infrastructure
+  - kubernetes
+  - aws
+  - azure
+  - mlops
+  - machine learning
+  - ml engineer
+  - ai engineer
+  - genai
+  - llm
+  - qa
+  - quality engineer
+  - quality assurance
+  - test automation
+  - test engineer
+  - sdet
+  - automation engineer
+  - release engineer
+  - build engineer
+
+# Never apply to these companies (e.g. your current employer). Case-insensitive name match.
+blocked_companies: []
+
+# Any of these in the title drops the job (seniority, non-full-time, wrong field).
+title_exclude:
+  - lead
+  - principal
+  - staff
+  - head of
+  - manager
+  - director
+  - architect
+  - werkstudent
+  - working student
+  - intern
+  - internship
+  - phd
+  - doktorand
+  - trainee
+  - apprentice
+  - praktik
+  - ausbildung
+  - thesis
+  - abschlussarbeit
+  - sales
+  - account executive
+  - security analyst
+  - consultant
+
+# Arbeitsagentur keyword searches (one API call each).
+arbeitsagentur:
+  queries:
+    - DevOps Engineer
+    - Cloud Engineer
+    - Platform Engineer
+    - Site Reliability Engineer
+    - Kubernetes
+    - MLOps
+    - Machine Learning Engineer
+    - AI Engineer
+    - QA Automation
+    - Test Automation Engineer
+  published_within_days: 7
+  exclude_temp_agencies: true      # zeitarbeit
+  exclude_private_recruiters: true # private Arbeitsvermittlung
+
+# LinkedIn via the public guest API (searches) plus saved top-pick ids (collected in Chrome).
+linkedin:
+  queries: [DevOps Engineer, Cloud Engineer, Platform Engineer, Site Reliability Engineer, Kubernetes,
+            QA Automation Engineer, Test Automation Engineer, MLOps Engineer, AI Engineer, Machine Learning Engineer]
+  location: Germany
+  posted_within_hours: 24
+  max_per_query: 50
+  top_picks_file: data/linkedin_top_picks.txt
+
+# German-language postings and 'fluent German required' postings are allowed (user is B1).
+allow_german: true
+
+# Postings found in the last N days only (ATS boards).
+max_age_days: 60

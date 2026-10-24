@@ -1,0 +1,16 @@
+# Company watchlist: careers boards polled on every discovery run.
+# Add a company: find its ATS from the careers-page URL and add the board slug.
+#   boards.greenhouse.io/<slug>   jobs.lever.co/<slug>   jobs.ashbyhq.com/<slug>
+#   jobs.smartrecruiters.com/<slug>   <slug>.jobs.personio.de
+
+greenhouse: [adyen, bitpanda, canonical, celonis, cloudflare, commercetools, contentful, contentstack,
+             datadog, doctolib, elastic, figma, freenow, getyourguide, gitlab, grafanalabs, grover,
+             hellofresh, helsing, immoscout24, ionos, isaraerospace, jetbrains, konux, mongodb,
+             mozilla, n26, navvis, parloa, raisin, refurbed, scout24, solarisbank, spryker, staffbase,
+             stepstone, storyblok, strato, stripe, sumup, trivago, wolt]
+lever: [emma-sleep, finn, qonto, spotify, zeiss]
+ashby: [alephalpha, babbel, billie, camunda, clark, deepl, enpal, flink, langdock, lemonade, miro,
+        moss, n8n, notion, pleo, posthog, rebuy, supabase, upvest]
+smartrecruiters: [DeliveryHero, BoschGroup, ContinentalAG, Sixt]
+personio: [1komma5grad, celus, chrono24, everphone, merantix, ottonova, penta, tado, thermondo,
+           twaice, vivid, wandelbots, westwing, workpath]

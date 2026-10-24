@@ -1,0 +1,25 @@
+\documentclass[a4paper,11pt]{article}
+((* include "preamble.tex" *))
+\setlength{\parskip}{7pt}
+
+\begin{document}
+\cvheader
+\vspace{-6pt}\noindent\rule{\textwidth}{0.4pt}
+
+\vspace{4pt}
+((( company | tex ))) \hfill ((( today | tex )))
+
+\vspace{6pt}
+\textbf{Application: ((( title | tex )))}
+
+\vspace{4pt}
+((( letter.greeting | tex )))
+
+((* for para in letter.paragraphs *))
+((( para | tex )))
+
+((* endfor *))
+((( letter.closing | tex ))) \\
+((( p.name | tex )))
+
+\end{document}
