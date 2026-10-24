@@ -1,0 +1,13 @@
+data/*.db
+output/
+__pycache__/
+.DS_Store
+profile/photo.jpg
+data/score_batches/
+profile/master_profile.yaml
+profile/answer_bank.yaml
+data/linkedin_top_picks.txt
+*.jpg
+*.png
+*.pdf
+!docs/**
